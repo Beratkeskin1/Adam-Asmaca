@@ -40,13 +40,13 @@ class Keliemeleri_belirle:
     def harf_tahmin(self,kelime):
         tahmin = harf_tahmin_entry.get().lower()
         bulundumu = False
-        if len(tahmin) == 0 and len(kelime) != 0:
+        if not tahmin  and not not kelime:
             messagebox.showinfo("BOŞ HARF HATASI ", "lütfen bir harf girin ")
             bulundumu = True
-        elif len(kelime) == 0 and len(tahmin) == 0:
+        elif not kelime and not tahmin:
             messagebox.showinfo("BOŞ İNDEXLER HATASI", "lütfen bir kelime belirleyin ve sonra da harf belirleyin")
             bulundumu = True
-        elif len(tahmin) != 0 and len(kelime) == 0:
+        elif not not tahmin and not kelime:
             messagebox.showinfo("BOŞ KELİME HATASI", "lütfen bir kelime seçin")
             bulundumu = True
         if len(tahmin) == 1:
@@ -64,13 +64,13 @@ class Keliemeleri_belirle:
                     bulundumu = True
                     self.aynı_harf.add(tahmin)
                     self.harfleri_tut.add(bölüm)
-                if bulundumu:
-                    if len(self.harfleri_tut) == len(kelime):
-                        harf_tahmin_entry.destroy()
-                        harf_tahmin_button.destroy()
-                        harf_tahmin.destroy()
-                        messagebox.showinfo(title="OYUNU KAZANDIN!",message="TEBRİKLER OYUNU KAZANDINIZ")
-                        t.bye()
+            if bulundumu:
+                if all(kelime[i] in self.aynı_harf for i in range(len(kelime))):
+                    harf_tahmin_entry.destroy()
+                    harf_tahmin_button.destroy()
+                    harf_tahmin_label.destroy()
+                    messagebox.showinfo(title="OYUNU KAZANDIN!",message="TEBRİKLER OYUNU KAZANDINIZ")
+                    t.bye()
             if len(self.harfleri_tut) != len(kelime):
                 harf_tahmin_entry.delete(0, tk.END)
 
@@ -154,7 +154,7 @@ class Keliemeleri_belirle:
                     harf_tahmin_entry.delete(0, tk.END)
                     harf_tahmin_entry.destroy()
                     harf_tahmin_button.destroy()
-                    harf_tahmin.destroy()
+                    harf_tahmin_label.destroy()
                     t.penup()
                     t.goto(50,100)
                     t.pendown()
@@ -168,8 +168,8 @@ Kelimeleri_belirle = Keliemeleri_belirle()
 kelime_belirleme_butonu = tk.Button(text="seç",command=lambda:Kelimeleri_belirle.kelime_oluştur(kelime_entry.get().lower()) )
 kelime_belirleme_butonu.pack()
 
-harf_tahmin = tk.Label(text="BİR HARF TAHMİNİNDE BULUNUN",font=FONT_turtle)
-harf_tahmin.pack()
+harf_tahmin_label = tk.Label(text="BİR HARF TAHMİNİNDE BULUNUN",font=FONT_turtle)
+harf_tahmin_label.pack()
 
 harf_tahmin_entry = tk.Entry(width=50,)
 harf_tahmin_entry.pack()
@@ -183,12 +183,6 @@ k.speed(0)
 k.pensize(2)
 screen.bgcolor("#4e4f30")
 screen.setup(1000,800)
-for kelime_tahmin in kelime_entry.get():
-    harf_sayısı = len(kelime_tahmin)
-    for i in range(harf_sayısı):
-        k.forward(100)
-
-
 k.penup()
 k.goto(x=-300,y=-10)
 k.pendown()
